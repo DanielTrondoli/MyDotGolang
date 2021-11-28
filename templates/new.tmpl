@@ -1,0 +1,88 @@
+{{define "New"}}
+
+{{template "_head"}}
+
+{{template "_menu"}}
+
+<div class="container">
+
+    <body>
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                {{if .Id}}
+                    <h1 class="display-5">Editando produto</h1>
+                    <p class="lead">Insira as novas informações</p>
+                {{else}}
+                    <h1 class="display-5">Novo produto</h1>
+                    <p class="lead">Insira os detalhes</p>
+                {{end}}
+            </div>
+        </div>
+        
+        {{if .Id}}
+            <form method="POST" action="update">
+            <input type="hidden" value="{{.Id}}" name="id">
+        {{else}}
+            <form method="POST" action="insert">
+        {{end}}
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="form-group">
+                        <label for="nome">Nome:</label>
+                        {{if .Nome }}
+                            <input type="text" name="nome" value="{{.Nome}}" class="form-control">
+                        {{else}}
+                            <input type="text" name="nome" value="" class="form-control">
+                        {{end}}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="form-group">
+                        <label for="descricao">Descrição:</label>
+                        {{if .Descricao }}
+                            <input type="text" name="descricao" value="{{.Descricao}}" class="form-control">
+                        {{else}}
+                            <input type="text" name="descricao" class="form-control">
+                        {{end}}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label for="preco">Preço:</label>
+                        {{if .Preco }}
+                            <input type="number" name="preco" value="{{.Preco}}" class="form-control" step="0.01">
+                        {{else}}
+                            <input type="number" name="preco" class="form-control" step="0.01">
+                        {{end}}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label for="quantidade">Quantidade:</label>
+                        {{if .Quantidade }}
+                            <input type="number" name="quantidade" value="{{.Quantidade}}" class="form-control">
+                        {{else}}
+                            <input type="number" name="quantidade" class="form-control">
+                        {{end}}
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" value="salvar" class="btn btn-success">Salvar</button>
+            <a class="btn btn-info" href="/">Voltar</a>
+        </form>
+    </body>
+
+</html>
+</div>
+</body>
+
+</html>
+{{end}}
