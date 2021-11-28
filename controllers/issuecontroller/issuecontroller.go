@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/DanielTrondoli/MyDotGolang/repository/issuerepository"
 	"github.com/DanielTrondoli/MyDotGolang/service/issueservice"
@@ -18,9 +19,25 @@ func GetAllIssues(c *gin.Context) {
 		date = ""
 	}
 
-	allIssues := issueservice.GetAllIssues()
+	strShowAllIssues, ok := c.GetQuery("showAllIssues")
+	if !ok {
+		strShowAllIssues = "false"
+	}
 
-	activates := issueservice.GetActiveIssues(allIssues)
+	fmt.Println("showAllIssues: ", strShowAllIssues)
+
+	allIssues := issueservice.GetAllIssues()
+	showAllIssues, err := strconv.ParseBool(strShowAllIssues)
+	if err != nil {
+		log.Default().Print(err.Error())
+	}
+
+	allNohideIssues := allIssues
+	if !showAllIssues {
+		allNohideIssues = issueservice.GetNoHideIssues()
+	}
+
+	activates := issueservice.GetActiveIssues(allNohideIssues)
 
 	workLogsOfTheDay := issueservice.GetWorkLogsOfTheDay(allIssues, date)
 
@@ -46,7 +63,7 @@ func GetAllIssues(c *gin.Context) {
 	}
 
 	c.HTML(http.StatusOK, "home.html", gin.H{
-		"data":             allIssues,
+		"data":             allNohideIssues,
 		"activates":        activates,
 		"workLogsOfTheDay": workLogsOfTheDay,
 		"CurrentDate":      currentDate,
@@ -54,7 +71,42 @@ func GetAllIssues(c *gin.Context) {
 		"PreviousDate":     previousDate,
 		"NextWeek":         nextWeek,
 		"PreviousWeek":     previousWeek,
+		"showAllIssues":    showAllIssues,
 	})
+}
+
+func HideIssue(c *gin.Context) {
+
+	hashKey, ok := c.GetQuery("uuid")
+	if ok {
+		issuerepository.HideIssue(hashKey)
+	} else {
+		log.Fatal("chave 'UUID' não informada !")
+	}
+
+	strShowAllIssues, ok := c.GetQuery("showAllIssues")
+	if !ok {
+		strShowAllIssues = "false"
+	}
+
+	c.Redirect(http.StatusFound, "/?showAllIssues="+strShowAllIssues)
+}
+
+func ShowIssue(c *gin.Context) {
+
+	hashKey, ok := c.GetQuery("uuid")
+	if ok {
+		issuerepository.ShowIssue(hashKey)
+	} else {
+		log.Fatal("chave 'UUID' não informada !")
+	}
+
+	strShowAllIssues, ok := c.GetQuery("showAllIssues")
+	if !ok {
+		strShowAllIssues = "false"
+	}
+
+	c.Redirect(http.StatusFound, "/?showAllIssues="+strShowAllIssues)
 }
 
 func InsertIssues(c *gin.Context) {
@@ -82,6 +134,5 @@ func DeleteIssue(c *gin.Context) {
 		log.Fatal("chave a ser deletada nao existe !")
 	}
 
-	fmt.Println(" ", hashKey)
 	c.Redirect(http.StatusFound, "/")
 }

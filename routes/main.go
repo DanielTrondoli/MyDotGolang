@@ -16,6 +16,8 @@ func Routes(router *gin.Engine) {
 
 	router.GET("/worklog_start", worklogcontroller.Start)
 	router.GET("/worklog_stop", worklogcontroller.Stop)
+	router.GET("/issue_hide", issuecontroller.HideIssue)
+	router.GET("/issue_show", issuecontroller.ShowIssue)
 
 	// router.GET("/ticwork", tickWork)
 

@@ -38,6 +38,17 @@ func GetActiveIssues(allIssues []issue.Issue) []bool {
 	return activates
 }
 
+func GetNoHideIssues() []issue.Issue {
+
+	allIssues, err := issuerepository.GetAllNoHideIssues()
+	if err != nil {
+		log.Default().Print(err.Error())
+		return []issue.Issue{}
+	}
+
+	return allIssues
+}
+
 func GetWorkLogsOfTheDay(allIssues []issue.Issue, dateTime string) []relworklogitem.Relworklogitem {
 
 	workLogsOfTheDay := make([]relworklogitem.Relworklogitem, 0)
@@ -53,7 +64,7 @@ func GetWorkLogsOfTheDay(allIssues []issue.Issue, dateTime string) []relworklogi
 		log.Default().Print(err.Error())
 		return []relworklogitem.Relworklogitem{}
 	}
-	fmt.Println("GetWorkLogsOfTheDay: ", dateTime)
+
 	if dateTime != "" {
 		days, err := timeutils.DifDateFromNow(dateTime)
 		if err != nil {
@@ -66,7 +77,7 @@ func GetWorkLogsOfTheDay(allIssues []issue.Issue, dateTime string) []relworklogi
 			now0 = now0.Add(days)
 			now23 = now23.Add(days)
 		}
-		fmt.Println("GetWorkLogsOfTheDay: ", now0, now23)
+
 	}
 
 	for _, iss := range allIssues {

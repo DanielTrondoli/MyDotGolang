@@ -145,8 +145,8 @@ func (conn DynamoConnection) Update(tableName, key string, hashKey interface{}, 
 	return nil
 }
 
-func (conn DynamoConnection) Get(tableName, key string, keyValue interface{}, result interface{}) error {
-	fmt.Println("GET")
+func (conn DynamoConnection) GetOneBykey(tableName, key string, keyValue interface{}, result interface{}) error {
+	fmt.Println("GetOneBykey")
 	db := conn.conn
 	if db == nil {
 		return fmt.Errorf("conexao nao realizada")
@@ -154,6 +154,23 @@ func (conn DynamoConnection) Get(tableName, key string, keyValue interface{}, re
 
 	query := db.Table(tableName).Get(key, keyValue)
 	err := query.One(result)
+	if err != nil {
+		return fmt.Errorf(err.Error())
+	}
+
+	return nil
+}
+
+func (conn DynamoConnection) Get(tableName, key string, keyValue interface{}, result interface{}) error {
+	fmt.Println("GET")
+	db := conn.conn
+	if db == nil {
+		return fmt.Errorf("conexao nao realizada")
+	}
+	fmt.Println("GET:", key, keyValue)
+	query := db.Table(tableName).Scan().Filter(fmt.Sprintf("'%s' = ?", key), keyValue)
+
+	err := query.All(result)
 	if err != nil {
 		return fmt.Errorf(err.Error())
 	}

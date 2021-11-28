@@ -15,13 +15,20 @@
                         {{range $i, $e := .data}}
                         <tr>
                             <td>{{$e.Title}}</td>
-                            <td>{{$e.URL}}</td>                            
-                            {{ if index $.activates $i }}
-                                <td><a href="/worklog_stop?uuid={{.UUID}}" class="btn btn-danger">Stop</a></td>
-                            {{ else }}
-                                <td><a href="/worklog_start?uuid={{.UUID}}" class="btn btn-success">Iniciar</a></td>
+                            <td>{{$e.URL}}</td>
+                            {{ if not $.showAllIssues }}                                
+                                {{ if index $.activates $i }}
+                                    <td><a href="/worklog_stop?uuid={{.UUID}}" class="btn btn-danger">Stop</a></td>
+                                {{ else }}
+                                    <td><a href="/worklog_start?uuid={{.UUID}}" class="btn btn-success">Iniciar</a></td>
+                                {{ end }}
                             {{ end }}
-                            <td> <button onclick="onDelete('{{.UUID}}')" class="btn btn-secondary">Deletar</button> </td>
+                            <td> <button onclick="onDelete('{{.UUID}}', '{{$.showAllIssues}}')" class="btn btn-secondary">Deletar</button> </td>
+                            {{ if $e.Hide }}
+                                <td><a href="/issue_show?uuid={{.UUID}}&showAllIssues={{$.showAllIssues}}" class="btn btn-info">Show</a></td>
+                            {{ else }}
+                                <td><a href="/issue_hide?uuid={{.UUID}}&showAllIssues={{$.showAllIssues}}" class="btn btn-info">Hide</a></td>
+                            {{ end }}                            
                         </tr>
                         {{end}}
                     </tbody>
@@ -29,7 +36,13 @@
             </div>
         </section>
         <div class="" style="margin-top: 15px;">            
-          <a href="#demo" class="btn btn-primary" data-toggle="collapse">Insert New Issue</a>
+          <a href="#demo" class="btn btn-primary" data-toggle="collapse">Insert New Issue</a>         
+          {{ if .showAllIssues }}
+            <a href="/?showAllIssues=false" class="btn btn-primary" >Hide Issues</a>
+          {{ else }}  
+            <a href="/?showAllIssues=true" class="btn btn-primary" >Show all Issues</a>
+          {{ end }}
+
           <div id="demo" class="collapse">
             <div class="card-footer">
                 <form method="POST" action="issue">
@@ -77,10 +90,10 @@
 </body>
 <script>
 
-    function onDelete(uuid){
+    function onDelete(uuid, showAllIssues){
         let resposta = confirm("Tem certeza que deseja deletar esta issue ?")
         if(resposta){
-            window.location = "/deleteissue?uuid="+uuid
+            window.location = "/deleteissue?uuid="+uuid+"&showAllIssues=" + showAllIssues
         }
     }
 
