@@ -1,7 +1,6 @@
 package issuecontroller
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -23,8 +22,6 @@ func GetAllIssues(c *gin.Context) {
 	if !ok {
 		strShowAllIssues = "false"
 	}
-
-	fmt.Println("showAllIssues: ", strShowAllIssues)
 
 	allIssues := issueservice.GetAllIssues()
 	showAllIssues, err := strconv.ParseBool(strShowAllIssues)

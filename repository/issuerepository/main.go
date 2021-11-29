@@ -71,7 +71,6 @@ func GetAllNoHideIssues() ([]issue.Issue, error) {
 		return []issue.Issue{}, err
 	}
 
-	fmt.Println("GetAllNoHideIssues: ", result2)
 	return result2, nil
 }
 

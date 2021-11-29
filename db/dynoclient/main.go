@@ -3,6 +3,7 @@ package dynoclient
 import (
 	"fmt"
 	"log"
+	"os"
 	"sync"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -26,7 +27,7 @@ func GetInstanse() *DynamoConnection {
 		if db == nil {
 			fmt.Println("Creating single instance now.")
 			db = &DynamoConnection{}
-			db.GetConnection("")
+			db.GetConnection()
 		}
 	} else {
 		fmt.Println("Using single instance now.")
@@ -35,13 +36,14 @@ func GetInstanse() *DynamoConnection {
 	return db
 }
 
-func (conn *DynamoConnection) GetConnection(endpoint string) error {
+func (conn *DynamoConnection) GetConnection() error {
 
 	cfg := aws.Config{}
 
-	cfg.Region = aws.String("eu-west-2")
+	cfg.Region = aws.String("local")
+	endpoint := os.Getenv("DYNAMODB_ENDPOINT")
 	if endpoint == "" {
-		endpoint = "http://0.0.0.0:8000"
+		endpoint = "http://localhost:8000/" //http://dynamodb:8000/
 	}
 
 	fmt.Println("Conect dynamodb in: ", endpoint)

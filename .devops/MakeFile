@@ -1,0 +1,5 @@
+#Build Image
+docker build --file ".devops/Dockerfile" -t mydotgolang .
+
+#Run Image
+docker run -it -e AWS_ACCESS_KEY_ID='DUMMYIDEXAMPLE' -e AWS_SECRET_ACCESS_KEY='DUMMYEXAMPLEKEY' -p 1666:1666 mydotgolang 

@@ -1,23 +1,34 @@
 version: '3.8'
 services:
-  dynamodb-local:
+  dynamodb:
     command: "-jar DynamoDBLocal.jar -sharedDb -optimizeDbBeforeStartup -dbPath ./data"
     image: "amazon/dynamodb-local:latest"
-    container_name: dynamodb-local
+    container_name: dynamodb
     ports:
       - "8000:8000"
     volumes:
       - "./docker/dynamodb:/home/dynamodblocal/data"
     working_dir: /home/dynamodblocal
-    # app-node:
-    # depends_on:
-    #   - dynamodb-local
-    # image: banst/awscli
-    # container_name: app-node
-    # ports:
-    #  - "8080:8080"
-    # environment:
-    #   AWS_ACCESS_KEY_ID: 'DUMMYIDEXAMPLE'
-    #   AWS_SECRET_ACCESS_KEY: 'DUMMYEXAMPLEKEY'
-    # command:
-    #   dynamodb describe-limits --endpoint-url http://dynamodb-local:8000 --region us-west-2
+    networks:
+      - network_jiracontrol
+  app-golang:
+      depends_on:
+        - dynamodb
+      image: mydotgolang
+      build:
+          context: ../
+          dockerfile: .devops/Dockerfile
+      container_name: app-jiracontrol      
+      environment:
+          DYNAMODB_ENDPOINT: http://dynamodb:8000/
+      #   - AWS_ACCESS_KEY_ID=dummy
+      #   - AWS_SECRET_ACCESS_KEY=dummy
+      #   - AWS_REGION=us-east-1
+      ports:
+        - "1666:1666"
+      networks:
+        - network_jiracontrol
+
+networks:
+  network_jiracontrol:
+    driver: bridge
