@@ -7,7 +7,7 @@
                 <table class="table table-striped table-hover mb-0">
                     <thead>
                         <tr>
-                            <th>Titulo</th>
+                            <th>Title</th>
                             <th>URL</th>
                         </tr>
                     </thead>
@@ -20,7 +20,7 @@
                                 {{ if index $.activates $i }}
                                     <td><a href="/worklog_stop?uuid={{.UUID}}" class="btn btn-danger">Stop</a></td>
                                 {{ else }}
-                                    <td><a href="/worklog_start?uuid={{.UUID}}" class="btn btn-success">Iniciar</a></td>
+                                    <td><a href="/worklog_start?uuid={{.UUID}}" class="btn btn-success">Start</a></td>
                                 {{ end }}
                             {{ end }}
                             <td> <button onclick="onDelete('{{.UUID}}', '{{$.showAllIssues}}')" class="btn btn-secondary">Deletar</button> </td>
@@ -70,9 +70,9 @@
         <table class="table table-dark table-hover">
           <thead>
             <tr>
-              <th>Titulo</th>
+              <th>Title</th>
               <th>URL</th>
-              <th>Duracao</th>
+              <th>Duration</th>
             </tr>
           </thead>
           <tbody>                   
