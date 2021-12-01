@@ -30,7 +30,7 @@ func Start(hashKey string) {
 	}
 
 	issue.WorkLogs = append(issue.WorkLogs, start)
-	fmt.Println(issue)
+
 	issuerepository.UpdateWorkLogs(issue.UUID, issue.WorkLogs)
 }
 
@@ -44,7 +44,6 @@ func Stop(hashKey string) {
 	var achou bool
 	for i, w := range issue.WorkLogs {
 		if w.EndTime == (time.Time{}) {
-			fmt.Println("Endtime: ", time.Now())
 			issue.WorkLogs[i].EndTime = time.Now()
 			achou = true
 			break
@@ -56,7 +55,6 @@ func Stop(hashKey string) {
 		return
 	}
 
-	fmt.Println(issue)
 	issuerepository.UpdateWorkLogs(issue.UUID, issue.WorkLogs)
 }
 

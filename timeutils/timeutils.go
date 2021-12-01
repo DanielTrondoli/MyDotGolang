@@ -13,7 +13,7 @@ func GetNowTruncated() (time.Time, error) {
 
 	year, month, day := time.Now().Date()
 
-	now, err := time.Parse(LAYOUT_DMY, fmt.Sprintf("%d/%d/%d", day, month, year))
+	now, err := time.Parse(LAYOUT_DMY, fmt.Sprintf("%02d/%d/%d", day, month, year))
 	if err != nil {
 		return time.Time{}, err
 	}
@@ -25,7 +25,7 @@ func GetNowEndDay() (time.Time, error) {
 
 	year, month, day := time.Now().Date()
 
-	now, err := time.Parse(LAYOUT_DMYHMS, fmt.Sprintf("%d/%d/%d 23:59:59", day, month, year))
+	now, err := time.Parse(LAYOUT_DMYHMS, fmt.Sprintf("%02d/%d/%d 23:59:59", day, month, year))
 	if err != nil {
 		return time.Time{}, err
 	}
@@ -46,8 +46,6 @@ func DifDateFromNow(strDate string) (time.Duration, error) {
 		return -1, err
 	}
 
-	fmt.Println(time.Duration(date.Unix() - now.Unix()))
-
 	return date.Sub(now), nil
 }
 
@@ -58,7 +56,7 @@ func GetDayFormatedDMY(strDate string, add int) (string, error) {
 
 	date, err := time.Parse(LAYOUT_DMY, strDate)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println(err.Error())
 		return "", err
 	}
 

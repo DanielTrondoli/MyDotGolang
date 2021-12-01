@@ -164,12 +164,11 @@ func (conn DynamoConnection) GetOneBykey(tableName, key string, keyValue interfa
 }
 
 func (conn DynamoConnection) Get(tableName, key string, keyValue interface{}, result interface{}) error {
-	fmt.Println("GET")
 	db := conn.conn
 	if db == nil {
 		return fmt.Errorf("conexao nao realizada")
 	}
-	fmt.Println("GET:", key, keyValue)
+
 	query := db.Table(tableName).Scan().Filter(fmt.Sprintf("'%s' = ?", key), keyValue)
 
 	err := query.All(result)
@@ -210,51 +209,3 @@ func (conn DynamoConnection) GetAll(tableName string, result interface{}) error 
 
 	return nil
 }
-
-// func InitDB(endpoint string) {
-// 	conn.GetConnection(endpoint)
-// 	conn.DeleteAllTables()
-// 	conn.CreateTable("issue", issue.Issue{})
-// 	conn.ListTables()
-
-// 	newIssue := issue.Issue{
-// 		URL:      "http://dnaile1231231",
-// 		Title:    "Daniel123123",
-// 		WorkLogs: []worklogs.WorkLogs{},
-// 	}
-
-// 	newIssue2 := issue.Issue{
-// 		URL:      "http://dnaile1231232",
-// 		Title:    "Daniel123123",
-// 		WorkLogs: []worklogs.WorkLogs{},
-// 	}
-
-// 	newIssue3 := issue.Issue{
-// 		URL:      "http://dnaile1231233",
-// 		Title:    "Daniel123123",
-// 		WorkLogs: []worklogs.WorkLogs{},
-// 	}
-
-// 	conn.Put("issue", newIssue)
-// 	conn.Put("issue", newIssue2)
-// 	conn.Put("issue", newIssue3)
-
-// 	newIssue.Title = " $$$$$$$$$$$ "
-// 	conn.Update("issue", "url", newIssue.URL, "title", newIssue.Title)
-// 	fmt.Println(newIssue)
-
-// 	result := []issue.Issue{}
-// 	conn.GetAll("issue", "url", newIssue.URL, &result)
-// 	fmt.Println(result)
-
-// 	result = []issue.Issue{}
-// 	conn.GetAll("issue", "url", newIssue.URL, &result)
-// 	fmt.Println(result)
-// }
-
-// func main() {
-
-// 	c := DynamoConnection{}
-// 	c.InitDB("")
-
-// }

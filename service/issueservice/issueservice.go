@@ -72,7 +72,6 @@ func GetWorkLogsOfTheDay(allIssues []issue.Issue, dateTime string) []relworklogi
 			return []relworklogitem.Relworklogitem{}
 		}
 
-		fmt.Println(days)
 		if days != 0 {
 			now0 = now0.Add(days)
 			now23 = now23.Add(days)
@@ -117,13 +116,11 @@ func InsertIssues(title, url string) error {
 		log.Fatal(err.Error())
 	}
 
-	fmt.Println(title, " ", url)
-
 	newIssue := issue.Issue{
 		UUID:     hashKey.String(),
 		URL:      url,
 		Title:    title,
-		WorkLogs: []worklogs.WorkLogs{},
+		WorkLogs: make([]worklogs.WorkLogs, 0),
 		Hide:     false,
 	}
 
